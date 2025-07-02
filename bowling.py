@@ -174,5 +174,12 @@ class GameTest(unittest.TestCase):
 
         self.assertEqual(300, game.score(), 'perfect game should be 300')
 
+    def test_all_spares(self):
+        game = Game()
+        for i in range(21):
+            game.roll(5)
+
+        self.assertEqual(150, game.score(), 'all spares should be 150');
+
 if __name__ == '__main__':
     unittest.main()
