@@ -1,4 +1,4 @@
-def scoreRolls(rolls):
+def scoreGame(rolls):
     return sum(rolls)
 
 
@@ -8,7 +8,7 @@ gametests = [
 ]
 
 for rolls, expectedScore in gametests:
-    actualScore = scoreRolls(rolls)
+    actualScore = scoreGame(rolls)
     if actualScore != expectedScore:
         print('rolls:', rolls, 'scored', actualScore, 'but expected', expectedScore)
 
