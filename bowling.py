@@ -49,8 +49,10 @@ class Game:
             self.frames.append(Frame())
 
     def roll(self, pinsDown):
-        self.currentFrame().roll(pinsDown)
-        if self.currentFrame().shouldStartNextFrame():
+        for frame in self.openFrames():
+            frame.roll(pinsDown)
+
+        if self.shouldStartNextFrame():
             self.startNextFrame()
 
     def score(self):
@@ -60,11 +62,23 @@ class Game:
             0
         )
             
-    def currentFrame(self):
-        return self.frames[self.currentFrameIdx]
+    def openFrames(self):
+        return filter(
+            lambda frame: frame.isOpen(),
+            self.frames[:self.currentFrameIdx + 1]
+        )
 
     def startNextFrame(self):
         self.currentFrameIdx += 1
+
+    def shouldStartNextFrame(self):
+        if not self.frames[self.currentFrameIdx].shouldStartNextFrame():
+            return False
+
+        if self.currentFrameIdx == len(self.frames) - 1:
+            return False
+
+        return True
 
 
 class FrameTest(unittest.TestCase):
@@ -136,6 +150,29 @@ class GameTest(unittest.TestCase):
             game.roll(4)
 
         self.assertEqual(80, game.score(), 'ok game should score ninety')
+
+    def test_score_spare(self):
+        game = Game()
+        game.roll(5)
+        game.roll(5)
+        game.roll(5)
+
+        self.assertEqual(20, game.score(), 'spare should give 10 + bonus')
+
+    def test_score_strike(self):
+        game = Game()
+        game.roll(10)
+        game.roll(10)
+        game.roll(10)
+
+        self.assertEqual(60, game.score(), 'strike should give 10 + two bonuses')
+
+    def test_perfect_game(self):
+        game = Game()
+        for i in range(13):
+            game.roll(10)
+
+        self.assertEqual(300, game.score(), 'perfect game should be 300')
 
 if __name__ == '__main__':
     unittest.main()
