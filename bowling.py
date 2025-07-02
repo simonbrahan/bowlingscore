@@ -33,6 +33,8 @@ class Frame:
         if self.isStrike():
             return True
 
+        return False
+
     def isStrike(self):
         return len(self.rolls) > 0 and self.rolls[0] == 10
 
