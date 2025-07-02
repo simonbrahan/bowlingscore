@@ -1,3 +1,5 @@
+import unittest
+
 def scoreGame(rolls):
     return sum(rolls)
 
@@ -12,29 +14,19 @@ class Frame:
     def score(self):
         return sum(self.rolls)
 
+class BowlingTest(unittest.TestCase):
+    
+    def test_score_bad_frame(self):
+        badFrame = Frame()
+        badFrame.addRoll(0)
+        badFrame.addRoll(0)
+        self.assertEqual(0, badFrame.score(), 'Rolled zeros, score should be zero')
 
-frametests = [
-    ['bad frame', [0,0], 0]
-]
+    def test_score_good_frame(self):
+        badFrame = Frame()
+        badFrame.addRoll(4)
+        badFrame.addRoll(5)
+        self.assertEqual(9, badFrame.score(), 'Rolled four and five, score shiould be nine')
 
-for scenario, rolls, expectedScore in frametests:
-    frame = Frame()
-    for roll in rolls:
-        frame.addRoll(roll)
-
-    actualScore = frame.score()
-    if actualScore != expectedScore:
-        print('scenario: "', scenario, '" scored', actualScore, 'but expected', expectedScore)
-
-
-gametests = [
-    ['bad game', [0,0,0,0,0,0,0,0,0,0], 0],
-    ['ok game', [9,9,9,9,9,9,9,9,9,9], 90],
-    # ['score a spare', [9,1,5,0,0,0,0,0,0,0], 20],
-]
-
-for scenario, rolls, expectedScore in gametests:
-    actualScore = scoreGame(rolls)
-    if actualScore != expectedScore:
-        print('scenario: "', scenario, '" scored', actualScore, 'but expected', expectedScore)
-
+if __name__ == '__main__':
+    unittest.main()
